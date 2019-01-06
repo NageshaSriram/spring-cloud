@@ -21,12 +21,25 @@ public class ConsumerControllerClient {
 	@Autowired
 	private DiscoveryClient discoveryClient;
 	
+	/*@Autowired
+	private LoadBalancerClient loadBalancer;*/
+	
+/*	@Autowired
+	private RemoteCallService loadBalancer;*/
+	
 	public void getEmployee() throws RestClientException, IOException {
 
 		List<ServiceInstance> instances=discoveryClient.getInstances("employee-producer");
 		ServiceInstance serviceInstance=instances.get(0);
+
+		/*List<ServiceInstance> instances=discoveryClient.getInstances("EMPLOYEE-ZUUL-SERVICE");
+		ServiceInstance serviceInstance=instances.get(0);*/
+		
+		/*ServiceInstance serviceInstance=loadBalancer.choose("employee-producer");*/
 		
 		String baseUrl=serviceInstance.getUri().toString();
+		
+		//baseUrl=baseUrl+"/producer/employee";
 		
 		baseUrl=baseUrl+"/employee";
 		
@@ -40,6 +53,16 @@ public class ConsumerControllerClient {
 			System.out.println(ex);
 		}
 		System.out.println(response.getBody());
+		
+		
+		
+/*		try {
+			Employee emp = loadBalancer.getData();
+			System.out.println("Hiii  "+emp.getEmpId());
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}*/
+		
 	}
 
 	private static HttpEntity<?> getHeaders() throws IOException {
